@@ -23,7 +23,7 @@ export const SocketContextProvider = ({ children }) => {
         const userId = authUser.user._id;
     
 
-        const socketInstance = io("https://chat-app-4j3t.onrender.com", {
+        const socketInstance = io("https://chat-backend-hnzb.onrender.com", {
             query: { userId },
             transports: ['websocket'],
         });
