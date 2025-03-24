@@ -10,12 +10,25 @@ const App = () => {
   const { authUser } = useAuthContext();
 
   return (
-    <div className='p-4 h-screen flex items-center justify-center'>
-      <Routes>
-        <Route path='/' element={authUser ? <Home />: <Navigate to={'/login'}/>} />
-        <Route path='/login' element={authUser ? <Navigate to="/" /> : <Login />} />
-        <Route path='/signup' element={authUser ? <Navigate to="/" /> : <Signup />} />
-      </Routes>
+    <div className=" h-full">
+      {/* Header */}
+      <header className="bg-gray-800 text-white p-4">
+        <h1 className='text-center text-2xl'>Chat</h1>
+      </header>
+
+     
+
+        {/* Main Content */}
+        <main className=" p-8">
+          <Routes>
+            <Route path="/" element={authUser ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/login" element={authUser ? <Navigate to="/" /> : <Login />} />
+            <Route path="/signup" element={authUser ? <Navigate to="/" /> : <Signup />} />
+          </Routes>
+        </main>
+      
+
+      {/* Toast Notifications */}
       <Toaster />
     </div>
   );

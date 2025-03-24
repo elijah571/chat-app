@@ -1,12 +1,12 @@
-import React from 'react'
-import MessageContainer from './MessageContainer'
+import React from 'react';
+import MessageContainer from './MessageContainer';
 
 const Messages = () => {
   return (
-    <div>
-      <MessageContainer/>
+    <div className="flex-grow">
+      <MessageContainer />
     </div>
-  )
-}
+  );
+};
 
-export default Messages
+export default Messages;

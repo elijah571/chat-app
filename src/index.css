@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body{
-    background: url("/bg.jfif");
+    background: url("../public/chat-app-bg.jfif");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

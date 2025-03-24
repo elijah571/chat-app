@@ -25,7 +25,7 @@ export const useSendMessage = () => {
         throw new Error(data.message || "Message sending failed");
       }
 
-      setMessages([...messages, data]); // Ensure messages update properly
+      setMessages([...messages, data]);
     } catch (error) {
       toast.error(error.message);
     } finally {

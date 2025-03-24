@@ -12,17 +12,28 @@ export const useListenMessages = () => {
 
         const handleNewMessage = (newMessage) => {
             const sound = new Audio(notificationSound);
-            sound.play();
+            
+            // Log to verify the audio file is loaded and played
+            sound.oncanplaythrough = () => {
+                console.log("Audio is ready to be played.");
+                sound.play().catch((err) => console.error("Error playing audio:", err));
+            };
 
-            // ✅ Use functional update to prevent stale state issues
+            // Log any errors during audio play
+            sound.onerror = (err) => {
+                console.error("Error loading audio:", err);
+            };
+
+            sound.play().catch((err) => console.error("Error playing audio:", err));
+
+          
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         };
 
         socket.on("newMessage", handleNewMessage);
 
         return () => {
-            socket.off("newMessage", handleNewMessage); // ✅ Correct event name
+            socket.off("newMessage", handleNewMessage); 
         };
-    }, [socket, setMessages]); // ✅ No need to include `messages`
-
+    }, [socket, setMessages]); 
 };
