@@ -32,9 +32,8 @@ export const useGetMessages = () => {
         }
 
         // Check if the fetched data is different from the existing messages (by message ID or timestamp)
-        // This prevents unnecessary updates to the state.
         if (messages?.[0]?._id !== data?.[0]?._id) {
-          setMessages(data);
+          setMessages(data);  // Update messages if different
         }
       } catch (error) {
         toast.error(error.message || "Failed to load messages");
@@ -47,7 +46,7 @@ export const useGetMessages = () => {
     if (selectedConversation?._id) {
       getMessages();
     }
-  }, [selectedConversation?._id, setMessages]); // No need to depend on `messages` here
+  }, [selectedConversation?._id, setMessages, messages]); // Depend on selectedConversation._id and messages
 
   return { messages, loading };
 };
