@@ -1,39 +1,31 @@
 import { useEffect } from "react";
 import { useSocketContext } from "../context/SocketContext";
 import useConversation from "../zustand/useConversation";
-import notificationSound from '../asset/sounds/notification.mp3';
+import notificationSound from "../asset/sounds/notification.mp3";
 
 export const useListenMessages = () => {
-    const { socket } = useSocketContext();
-    const { setMessages } = useConversation();
+  const { socket } = useSocketContext();
+  const { setMessages } = useConversation();
 
-    useEffect(() => {
-        if (!socket) return; // Prevent errors if socket is null
+  useEffect(() => {
+    if (!socket) return;
 
-        const handleNewMessage = (newMessage) => {
-            const sound = new Audio(notificationSound);
-            
-            // Log to verify the audio file is loaded and played
-            sound.oncanplaythrough = () => {
-                console.log("Audio is ready to be played.");
-                sound.play().catch((err) => console.error("Error playing audio:", err));
-            };
+    const handleNewMessage = (newMessage) => {
+      console.log("Received new message:", newMessage); // Debugging log
 
-            // Log any errors during audio play
-            sound.onerror = (err) => {
-                console.error("Error loading audio:", err);
-            };
+      // Play sound notification on new message
+      const sound = new Audio(notificationSound);
+      sound.play();
 
-            sound.play().catch((err) => console.error("Error playing audio:", err));
+      // Add new message to the conversation
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
 
-          
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-        };
+    socket.on("newMessage", handleNewMessage);
 
-        socket.on("newMessage", handleNewMessage);
-
-        return () => {
-            socket.off("newMessage", handleNewMessage); 
-        };
-    }, [socket, setMessages]); 
+    // Cleanup listener on unmount
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [socket, setMessages]);
 };
