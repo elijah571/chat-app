@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSocketContext } from "../context/SocketContext";
 import useConversation from "../zustand/useConversation";
-import notificationSound from "../asset/sounds/notification.mp3";
+import notificationSound from '../asset/sounds/notification.mp3';
 
 export const useListenMessages = () => {
   const { socket } = useSocketContext();
@@ -11,19 +11,23 @@ export const useListenMessages = () => {
     if (!socket) return;
 
     const handleNewMessage = (newMessage) => {
-      console.log("Received new message:", newMessage); // Debugging log
+      console.log("Received new message:", newMessage);  // Debugging new message event
 
-      // Play sound notification on new message
       const sound = new Audio(notificationSound);
       sound.play();
 
-      // Add new message to the conversation
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      // Ensure we're appending the new message to the previous ones
+      setMessages((prevMessages) => {
+        // Avoid duplicates based on the message ID
+        if (!prevMessages.some((msg) => msg._id === newMessage._id)) {
+          return [...prevMessages, newMessage];
+        }
+        return prevMessages; // No change if the message is a duplicate
+      });
     };
 
     socket.on("newMessage", handleNewMessage);
 
-    // Cleanup listener on unmount
     return () => {
       socket.off("newMessage", handleNewMessage);
     };

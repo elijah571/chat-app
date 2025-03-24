@@ -2,12 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background: url("../public/chat-app-bg.jfif");
-    background-repeat: no-repeat;
+body {
+    background: url("/chat-app-bg.jfif") no-repeat center center fixed; /* Adjust the path */
     background-size: cover;
-    background-position: center;
+    background-color: #f0f0f0; /* Fallback color */
+    height: 100vh; /* Ensure the body covers the full viewport height */
+    margin: 0; /* Remove default margin */
 }
+
 ::-webkit-scrollbar{
     cursor: pointer;
     width: 8px;

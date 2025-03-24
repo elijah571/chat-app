@@ -35,7 +35,14 @@ export const useSendMessage = () => {
 
       // Emit the new message via socket for real-time update
       if (socket) {
-        socket.emit("newMessage", data);
+        socket.emit("newMessage", data, (acknowledgment) => {
+          // Handle acknowledgment from the server (if needed)
+          if (acknowledgment && acknowledgment.success) {
+            console.log("Message successfully broadcasted");
+          } else {
+            console.error("Error broadcasting message");
+          }
+        });
       }
 
       // Optionally, show a toast on successful message send

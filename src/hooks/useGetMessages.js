@@ -16,16 +16,24 @@ export const useGetMessages = () => {
           return;
         }
 
+        // Fetch messages for the selected conversation
         const res = await fetch(`/api/messages/${selectedConversation._id}`);
+        
+        // Check if the response is valid
+        if (!res.ok) {
+          throw new Error('Failed to fetch messages');
+        }
+
         const data = await res.json();
 
-        // Handle any API errors
+        // Handle any API errors in the response
         if (data.error) {
           throw new Error(data.error);
         }
 
-        // Only update messages if they differ from the current ones
-        if (JSON.stringify(data) !== JSON.stringify(messages)) {
+        // Check if the fetched data is different from the existing messages (by message ID or timestamp)
+        // This prevents unnecessary updates to the state.
+        if (messages?.[0]?._id !== data?.[0]?._id) {
           setMessages(data);
         }
       } catch (error) {
@@ -39,7 +47,7 @@ export const useGetMessages = () => {
     if (selectedConversation?._id) {
       getMessages();
     }
-  }, [selectedConversation?._id, setMessages, messages]); // Watch for selected conversation or messages change
+  }, [selectedConversation?._id, setMessages]); // No need to depend on `messages` here
 
   return { messages, loading };
 };
